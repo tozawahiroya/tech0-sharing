@@ -1,0 +1,53 @@
+
+import pandas as pd
+import numpy as np
+
+import openpyxl
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl import load_workbook
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+# df_report : 月報ひな形。[列、取引先コード、商品コードを取得]
+df_report = pd.read_excel('月報',header=7)
+
+
+df_report.head(2)
+df_codelist=df_report.loc[:,['取引先コード','商品コード']].dropna(how='all',axis=0)
+df_codelist.head(20)
+
+#月報 該当行番号の取得
+df_codelist['行番号'] = df_codelist.index+9
+df_codelist['商品コード'] = df_codelist['商品コード'].astype(int).astype(str)
+df_codelist['取引先コード'] = df_codelist['取引先コード'].astype(str).str[:10]
+df_codelist
+
+# df_sales 売上実績の取得
+df_sales = pd.read_excel('月次実績明細')
+df_sales.head(5)
+
+df_sales['商品CD'] = df_sales['商品CD'].astype(str)
+df_sales['売上先CD'] = df_sales['売上先CD'].astype(str)
+df_sales.head(20)
+
+# Key（取引先コード、商品コード）を基にしたDfの統合
+df_saleslist = pd.merge(df_codelist,df_sales,left_on=['取引先コード','商品コード'],right_on=['売上先CD','商品CD'])
+df_saleslist=df_saleslist.loc[:,['行番号','取引先コード','商品コード','当年当月数量','当年当月金額','当年当月利益']]
+df_saleslist['当年当月金額']=df_saleslist['当年当月金額']/1000
+df_saleslist['当年当月利益']=df_saleslist['当年当月利益']/1000
+df_saleslist
+
+# 埋め込み先のExcel操作
+wb = load_workbook('月報')
+ws = wb.active
+
+# 列番号を基準にした埋め込み
+for i in range(len(df_codelist)):
+  ws[f'AN{df_saleslist.iloc[i,0]}']=df_saleslist.iloc[i,3]
+  ws[f'AN{df_saleslist.iloc[i,0]+1}']=df_saleslist.iloc[i,4]
+  ws[f'AN{df_saleslist.iloc[i,0]+2}']=df_saleslist.iloc[i,5]
+
+wb.save('入力後 月報')
+
