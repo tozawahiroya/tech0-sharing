@@ -7,9 +7,6 @@ from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl import load_workbook
 
-from google.colab import drive
-drive.mount('/content/drive')
-
 # df_report : 月報ひな形。[列、取引先コード、商品コードを取得]
 df_report = pd.read_excel('月報',header=7)
 
