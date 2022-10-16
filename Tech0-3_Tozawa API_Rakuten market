@@ -1,7 +1,4 @@
-import requests  
-  import urllib.parse
-  from pyodide.http import open_url
-  import json
+  import requests  
         
   url="https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20170628?[parameter]=[value]…"
   params={}
