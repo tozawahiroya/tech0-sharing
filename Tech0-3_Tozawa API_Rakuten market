@@ -1,0 +1,58 @@
+import requests  
+  import urllib.parse
+  from pyodide.http import open_url
+  import json
+        
+  url="https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20170628?[parameter]=[value]…"
+  params={}
+  
+  params["applicationId"]="1017656543852139377"
+  params["genreId"]=201402
+  params["period"]="realtime"
+  response=requests.get(url,params)
+  results=response.json()
+  
+  Items=results['Items']
+      
+  #1~3位までの情報取得（Loop）
+  lp=0
+  Imagelist=[]
+  ShopName=[]
+  ShopUrl=[]
+  CatchCopy=[]
+  Rank=[]
+      
+  while lp<3:
+  
+    ##Imageの取得>>Imagelist
+    Image[lp]=Items[lp]['Item']['mediumImageUrls']
+    if type(Image[lp][0]) == dict:
+      Imagelist.append(Image[lp][0]['imageUrl'])
+    else:
+      Imagelist.append(Image[lp][0][0]['imageUrl'])
+      
+    ##店名の取得　>>ShopName
+    ShopName.append(Items[lp]['Item']['shopName'])
+          
+    ##店URL >> ShopUrl
+    ShopUrl.append(Items[lp]['Item']['shopUrl'])
+          
+    ##CatchCopy取得 >> CatchCopy
+    CatchCopy.append(Items[lp]['Item']['catchcopy'])
+    lp+=1
+    
+    print(Imagelist)
+    print(ShopName)
+    print(ShopUrl)
+    print(CatchCopy)
+    print(Rank)
+    
+----------------------------<実行結果>-----------------------------
+['https://thumbnail.image.rakuten.co.jp/@0_mall/sawaicoffee-tea/cabinet/thum/new1t/fv200_t_rak.jpg?_ex=128x128', 'https://thumbnail.image.rakuten.co.jp/@0_mall/fujitacoffee/cabinet/zouzei/ice/imgrc0073881928.jpg?_ex=128x128', 'https://thumbnail.image.rakuten.co.jp/@0_mall/coffeetuhan/cabinet/imgrc0079620430.jpg?_ex=128x128']
+['澤井珈琲Beans＆Leaf', 'コーヒー屋さんの手造り\u3000藤田珈琲', 'コーヒー通販・古川珈琲株式会社']
+['https://www.rakuten.co.jp/sawaicoffee-tea/', 'https://www.rakuten.co.jp/fujitacoffee/', 'https://www.rakuten.co.jp/coffeetuhan/']
+['送料無料 グルメ大賞コーヒージャンル受賞 レビューで大絶賛の初めての方や常連さんに大人気 人気の2種類のレギュラーコーヒーが合計200杯 お得なセット 珈琲福袋 2kg', '大阪の老舗が手がける冷コー(レイコー)です♪ オフィスへの配送もどうぞ♪ コーヒー コーヒー豆 珈琲 珈琲豆 藤田珈琲 送料無料 業務用 大入り 水出しコーヒーにも最適な中細挽きもご用意', '珈琲 コーヒー豆 コーヒー 高級']
+[1, 2, 3]
+    
+    
+    
