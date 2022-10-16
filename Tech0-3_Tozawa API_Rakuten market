@@ -39,6 +39,10 @@ import requests
           
     ##CatchCopy取得 >> CatchCopy
     CatchCopy.append(Items[lp]['Item']['catchcopy'])
+    
+    ##rankの取得 >> Rank
+    Rank.append(Items[lp]['Item']['rank'])
+    
     lp+=1
     
     print(Imagelist)
