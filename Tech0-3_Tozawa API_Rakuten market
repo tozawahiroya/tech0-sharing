@@ -3,7 +3,7 @@
   url="https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20170628?[parameter]=[value]…"
   params={}
   
-  params["applicationId"]="1017656543852139377"
+  params["applicationId"]="xxxxxxxxxxxxxxx" ##IDはブラインド
   params["genreId"]=201402
   params["period"]="realtime"
   response=requests.get(url,params)
